@@ -1,7 +1,8 @@
 ﻿
+
 namespace Catalog.Products.Models;
 
-public class Product : Entity<Guid>
+public class Product : Aggregate<Guid>
 {
    
     public string Name { get; private set; } = default!;
@@ -23,9 +24,10 @@ public class Product : Entity<Guid>
             ImageFile = imageFile,
             Price = price
         };
+        product.AddDomainEvent(new ProductCreatedEvent(product));
         return product;
     }
-    public void Update(string name, List<string> category, string description, string imageFile, decimal price) 
+    public void Update(string name, List<string> category, string description, string imageFile, decimal price)
     {
         ArgumentException.ThrowIfNullOrEmpty(name);
         ArgumentOutOfRangeException.ThrowIfNegativeOrZero(price);
@@ -34,6 +36,12 @@ public class Product : Entity<Guid>
         Description = description;
         ImageFile = imageFile;
         Price = price;
+        
+        if (Price != price)
+        {
+            Price = price;
+            AddDomainEvent(new ProductPriceChangedEvent(this));
+        }
     }
 
 }
