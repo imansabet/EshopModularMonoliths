@@ -19,7 +19,6 @@
     <Folder Include="Features\GetProducts\" />
     <Folder Include="Features\GetProductById\" />
     <Folder Include="Features\GetProductByCategory\" />
-    <Folder Include="Features\UpdateProduct\" />
   </ItemGroup>
 
 </Project>
