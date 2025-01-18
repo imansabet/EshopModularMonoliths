@@ -16,3 +16,4 @@ public class CreateProductCommandHandler : IRequestHandler<CreateProductCommand,
 
     }
 }
+ 
