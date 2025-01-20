@@ -1,12 +1,25 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿
+using Catalog.Features.CreateProduct;
 
-namespace Catalog.Features.GetProductByCategory
+namespace Catalog.Features.GetProductByCategory;
+//public record GetProductByCategoryRequest(string Category);
+public record GetProductByCategoryResponse(ProductDto Product);
+
+public class GetProductByCategoryEndpoint : ICarterModule
 {
-    internal class GetProductByCategoryEndpoint
+    public void AddRoutes(IEndpointRouteBuilder app)
     {
+        app.MapGet("products/category/{category}", async (string category, ISender sender) =>
+        {
+            var result = await sender.Send(new GetProductByCategoryQuery(category));
+
+            var response = result.Adapt<GetProductByCategoryResponse>();
+            return Results.Ok(response);
+        })
+        .WithName("GetProductByCategory")
+        .Produces<CreateProductResponse>(StatusCodes.Status200OK)
+        .ProducesProblem(StatusCodes.Status400BadRequest)
+        .WithSummary("Get Product By Category")
+        .WithDescription("Get Product By Category");
     }
 }
