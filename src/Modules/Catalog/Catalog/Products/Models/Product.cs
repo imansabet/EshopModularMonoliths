@@ -35,7 +35,6 @@ public class Product : Aggregate<Guid>
         Category = category;
         Description = description;
         ImageFile = imageFile;
-        Price = price;
         
         if (Price != price)
         {
