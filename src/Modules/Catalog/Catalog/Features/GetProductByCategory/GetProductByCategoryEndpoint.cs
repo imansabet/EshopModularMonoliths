@@ -3,7 +3,7 @@ using Catalog.Features.CreateProduct;
 
 namespace Catalog.Features.GetProductByCategory;
 //public record GetProductByCategoryRequest(string Category);
-public record GetProductByCategoryResponse(ProductDto Product);
+public record GetProductByCategoryResponse(IEnumerable<ProductDto> Products);
 
 public class GetProductByCategoryEndpoint : ICarterModule
 {
