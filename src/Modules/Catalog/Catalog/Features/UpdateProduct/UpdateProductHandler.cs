@@ -36,7 +36,7 @@ internal class UpdateProductHandler(CatalogDbContext dbContext) : ICommandHandle
             .FindAsync([command.Product.Id], cancellationToken: cancellationToken);
         if(product is null) 
         {
-            throw new Exception($"Product Not Found:{command.Product.Id}");
+            throw new ProductNotFoundException(command.Product.Id);
         }
         UpdateProductWithNewValues(product, command.Product);
         

@@ -1,5 +1,6 @@
 ﻿
 using Catalog.Features.GetProductByCategory;
+using static Microsoft.EntityFrameworkCore.DbLoggerCategory.Database;
 
 namespace Catalog.Features.GetProductById;
 
@@ -13,10 +14,10 @@ public class GetProductByIdHandler(CatalogDbContext dbContext) : IQueryHandler<G
         var product = await dbContext.Products
            .AsNoTracking()
            .SingleOrDefaultAsync(p => p.Id == query.Id, cancellationToken);
-           
-        if(product is null)
+
+        if (product is null)
         {
-            throw new Exception($"Product Not Found : {query.Id}");
+            throw new ProductNotFoundException(query.Id);
         }
 
         var productDto = product.Adapt<ProductDto>();
