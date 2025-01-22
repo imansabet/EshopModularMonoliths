@@ -22,18 +22,18 @@ public class CreateProductCommandValidator : AbstractValidator<CreateProductComm
 
 
 public class CreateProductHandler
-    (IValidator<CreateProductCommand> validator , ILogger<CreateProductHandler> logger
+    (ILogger<CreateProductHandler> logger
     ,CatalogDbContext dbContext) 
     : ICommandHandler<CreateProductCommand, CreateProductResult>
 {
     public async Task<CreateProductResult> Handle(CreateProductCommand command, CancellationToken cancellationToken)
     {
-        var result = await validator.ValidateAsync(command, cancellationToken);
-        var errors = result.Errors.Select(x => x.ErrorMessage).ToList();
-        if (errors.Any()) 
-        {
-            throw new ValidationException(errors.FirstOrDefault());
-        }
+        //var result = await validator.ValidateAsync(command, cancellationToken);
+        //var errors = result.Errors.Select(x => x.ErrorMessage).ToList();
+        //if (errors.Any()) 
+        //{
+        //    throw new ValidationException(errors.FirstOrDefault());
+        //}
 
         logger.LogInformation("CreateProductCommandHandler.Handle Called with {@Command}",command);
 

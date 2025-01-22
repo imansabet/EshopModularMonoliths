@@ -1,11 +1,30 @@
 ﻿
 
 
+using FluentValidation;
+
 namespace Catalog.Features.UpdateProduct;
 
 
 public record UpdateProductCommand(ProductDto Product)
     : ICommand<UpdateProductResult>;
+
+
+public class UpdateProductCommandValidator
+    : AbstractValidator<UpdateProductCommand>
+{
+    public UpdateProductCommandValidator()
+    {
+        RuleFor(x => x.Product.Id).NotEmpty().WithMessage("Product Id Is Required");
+        RuleFor(x => x.Product.Name)
+            .NotEmpty().WithMessage("Name Is Required");
+          
+        RuleFor(x => x.Product.Price).NotEmpty().WithMessage("Price must be greater than 0.");
+
+    }
+
+}
+
 
 public record UpdateProductResult(bool IsSuccess);
 
