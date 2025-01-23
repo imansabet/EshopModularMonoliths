@@ -1,4 +1,5 @@
 ﻿
+
 var builder = WebApplication.CreateBuilder(args);
 
 //builder.Services.AddCarter(configurator: config =>
@@ -16,6 +17,10 @@ builder.Services
     .AddOrderingModule(builder.Configuration)
     .AddBasketModule(builder.Configuration);
 
+builder.Services
+    .AddExceptionHandler<CustomExceptionHandler>();
+
+
 
 var app = builder.Build();
 
@@ -26,7 +31,7 @@ app
     .UseBasketModule()
     .UseOrderingModule();
 
-
+app.UseExceptionHandler(options => { });
 
 
 app.Run();
