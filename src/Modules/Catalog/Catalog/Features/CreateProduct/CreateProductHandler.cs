@@ -22,8 +22,7 @@ public class CreateProductCommandValidator : AbstractValidator<CreateProductComm
 
 
 public class CreateProductHandler
-    (ILogger<CreateProductHandler> logger
-    ,CatalogDbContext dbContext) 
+    (CatalogDbContext dbContext) 
     : ICommandHandler<CreateProductCommand, CreateProductResult>
 {
     public async Task<CreateProductResult> Handle(CreateProductCommand command, CancellationToken cancellationToken)
@@ -35,9 +34,6 @@ public class CreateProductHandler
         //    throw new ValidationException(errors.FirstOrDefault());
         //}
 
-        logger.LogInformation("CreateProductCommandHandler.Handle Called with {@Command}",command);
-
-        //actual logic
         var product = CreateNewProduct(command.Product);
 
         dbContext.Products.Add(product);
