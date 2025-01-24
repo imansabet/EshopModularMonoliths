@@ -1,6 +1,6 @@
 ﻿namespace Basket.Basket.Models;
 
-public class ShoppingCartItem
+public class ShoppingCartItem : Entity<Guid>
 {
     public Guid ShoppingCartId { get; private set; } = default!;
     public Guid ProductId { get; private set; } = default!;
