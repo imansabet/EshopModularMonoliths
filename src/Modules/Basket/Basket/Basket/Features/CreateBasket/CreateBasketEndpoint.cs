@@ -15,7 +15,6 @@ public class CreateBasketEndpoint : ICarterModule
             var response = result.Adapt<CreateBasketResponse>();
             return Results.Created($"/basket/{response.Id}", response);
         })
-        .WithName("Create Basket")
         .Produces<CreateBasketResponse>(StatusCodes.Status201Created)
         .ProducesProblem(StatusCodes.Status400BadRequest)
         .WithSummary("Create Basket")
