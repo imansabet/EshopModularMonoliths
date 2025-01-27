@@ -13,7 +13,7 @@ public static class BasketModule
     public static IServiceCollection AddBasketModule
         (this IServiceCollection services, IConfiguration configuration) 
     {
-        services.AddScoped<IBasketRepository, BasketRepository>(0);
+        services.AddScoped<IBasketRepository, BasketRepository>();
 
 
         var connectionString = configuration.GetConnectionString("Database");     

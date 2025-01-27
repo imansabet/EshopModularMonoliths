@@ -9,13 +9,17 @@ internal class BasketRepository(BasketDbContext dbContext) : IBasketRepository
         var query = dbContext.ShoppingCarts
             .Include(x => x.Items)
             .Where(x => x.UserName == userName);
+
         if (asNoTracking)
         {
             query.AsNoTracking();
         }
+
         var basket = await query.SingleOrDefaultAsync(cancellationToken);
+
         return basket ?? throw new BasketNotFoundException(userName);
     }
+
     public async Task<ShoppingCart> CreateBasket(ShoppingCart basket, CancellationToken cancellationToken = default)
     {
         dbContext.ShoppingCarts.Add(basket);
@@ -32,8 +36,6 @@ internal class BasketRepository(BasketDbContext dbContext) : IBasketRepository
 
         return true;
     }
-
-  
 
     public async Task<int> SaveChangesAsync(string? userName = null, CancellationToken cancellationToken = default)
     {
