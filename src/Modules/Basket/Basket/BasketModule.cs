@@ -14,7 +14,7 @@ public static class BasketModule
         (this IServiceCollection services, IConfiguration configuration) 
     {
         services.AddScoped<IBasketRepository, BasketRepository>();
-
+        services.Decorate<IBasketRepository, CachedBasketRepository>();
 
         var connectionString = configuration.GetConnectionString("Database");     
 
@@ -23,7 +23,7 @@ public static class BasketModule
 
         services.AddDbContext<BasketDbContext>((sp, options) =>
         {
-            options.AddInterceptors(sp.GetService<ISaveChangesInterceptor>());
+            options.AddInterceptors(sp.GetServices<ISaveChangesInterceptor>());
             options.UseNpgsql(connectionString);
         });
 
