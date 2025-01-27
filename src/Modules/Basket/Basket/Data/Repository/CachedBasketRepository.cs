@@ -8,6 +8,7 @@ namespace Basket.Data.Repository;
 public class CachedBasketRepository
     (IBasketRepository repository , IDistributedCache cache) : IBasketRepository
 {
+    // Deserialize
     private readonly JsonSerializerOptions _options = new JsonSerializerOptions
     {
         PropertyNamingPolicy = JsonNamingPolicy.CamelCase,
