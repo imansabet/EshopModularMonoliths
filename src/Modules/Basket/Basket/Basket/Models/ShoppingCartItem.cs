@@ -9,12 +9,10 @@ public class ShoppingCartItem : Entity<Guid>
     public int Quantity { get; internal set; } = default!;
     public string Color { get; private set; } = default!;
 
-    // From Catalog module
+    // will comes from Catalog module
     public decimal Price { get; private set; } = default!;
     public string ProductName { get; private set; } = default!;
 
-    // Internal constructor
-    [JsonConstructor]
     internal ShoppingCartItem(Guid shoppingCartId, Guid productId, int quantity, string color, decimal price, string productName)
     {
         ShoppingCartId = shoppingCartId;
@@ -25,4 +23,21 @@ public class ShoppingCartItem : Entity<Guid>
         ProductName = productName;
     }
 
+    [JsonConstructor]
+    public ShoppingCartItem(Guid id, Guid shoppingCartId, Guid productId, int quantity, string color, decimal price, string productName)
+    {
+        Id = id;
+        ShoppingCartId = shoppingCartId;
+        ProductId = productId;
+        Quantity = quantity;
+        Color = color;
+        Price = price;
+        ProductName = productName;
+    }
+
+    public void UpdatePrice(decimal newPrice)
+    {
+        ArgumentOutOfRangeException.ThrowIfNegativeOrZero(newPrice);
+        Price = newPrice;
+    }
 }
