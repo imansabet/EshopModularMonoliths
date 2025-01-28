@@ -1,4 +1,5 @@
 ﻿using Basket.Data.Repository;
+using Catalog.Contracts.Products.Features.GetProductById;
 
 namespace Basket.Basket.Features.AddItemIntoBasket;
 
@@ -14,21 +15,26 @@ public class AddItemIntoBasketCommandValidator : AbstractValidator<AddItemIntoBa
         RuleFor(x => x.ShoppingCartItem.Quantity).GreaterThan(0).WithMessage("Quantity must be greater than 0");
     }
 }
-internal class AddItemIntoBasketHandler(IBasketRepository repository )
+internal class AddItemIntoBasketHandler(IBasketRepository repository,ISender sender )
     : ICommandHandler<AddItemIntoBasketCommand, AddItemIntoBasketResult>
 {
     public async Task<AddItemIntoBasketResult> Handle(AddItemIntoBasketCommand command, CancellationToken cancellationToken)
     {
         var shoppingCart = await repository.GetBasket(command.UserName, false, cancellationToken);
 
+        // before add item into sc => should call catalog module getproductbyid  => get latest product information & set price
+        var result = await sender.Send
+            (new GetProductByIdQuery(command.ShoppingCartItem.ProductId));
 
 
         shoppingCart.AddItem(
                 command.ShoppingCartItem.ProductId,
                 command.ShoppingCartItem.Quantity,
                 command.ShoppingCartItem.Color,
-                command.ShoppingCartItem.Price,
-                command.ShoppingCartItem.ProductName);
+                result.Product.Price,
+                result.Product.Name);
+              //  command.ShoppingCartItem.Price,
+                //command.ShoppingCartItem.ProductName);
 
         await repository.SaveChangesAsync(command.UserName,cancellationToken);
 

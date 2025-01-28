@@ -1,4 +1,5 @@
 ﻿
+using Catalog.Contracts.Products.Features.GetProductById;
 using Catalog.Features.CreateProduct;
 using Catalog.Features.GetProducts;
 

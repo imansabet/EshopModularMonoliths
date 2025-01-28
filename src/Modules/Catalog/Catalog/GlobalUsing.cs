@@ -8,7 +8,6 @@ global using Catalog.Data;
 global using Catalog.Data.Seed;
 global using Shared.Data;
 global using Shared.Data.Seed;
-global using Catalog.Products.Dtos;
 global using Shared.Contracts.CQRS;
 global using Mapster;
 global using MediatR;
@@ -19,4 +18,5 @@ global using Microsoft.AspNetCore.Builder;
 global using Microsoft.AspNetCore.Http;
 global using Catalog.Products.Exceptions;
 global using Shared.Pagination;
+global using Catalog.Contracts.Products.Dtos;
 
