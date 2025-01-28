@@ -1,6 +1,8 @@
 ﻿
 
 
+using Shared.Messaging.Extensions;
+
 var builder = WebApplication.CreateBuilder(args);
 
 //builder.Services.AddCarter(configurator: config =>
@@ -13,7 +15,7 @@ var builder = WebApplication.CreateBuilder(args);
 
 builder.Host.UseSerilog((context,config) => 
     config.ReadFrom.Configuration(context.Configuration) 
-);
+); 
 
 //common services: carter, mediatr, fluentvalidation
 var catalogAssembly = typeof(CatalogModule).Assembly;
@@ -29,6 +31,8 @@ builder.Services.AddStackExchangeRedisCache(options =>
     options.Configuration = builder.Configuration.GetConnectionString("Redis");
 });
 
+builder.Services
+    .AddMassTransitWithAssemblies(builder.Configuration, catalogAssembly, basketAssembly);
 
 
 builder.Services
