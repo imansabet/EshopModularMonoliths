@@ -1,11 +1,11 @@
-﻿
-using Catalog.Features.GetProductByCategory;
-using static Microsoft.EntityFrameworkCore.DbLoggerCategory.Database;
+﻿using Catalog.Contracts.Products.Dtos;
+using Catalog.Contracts.Products.Features.GetProductById;
 
 namespace Catalog.Features.GetProductById;
 
-public record GetProductByIdQuery(Guid Id):IQuery<GetProductByIdResult>;
-public record GetProductByIdResult(ProductDto Product);
+// add refrence to contracts 
+//public record GetProductByIdQuery(Guid Id):IQuery<GetProductByIdResult>;
+//public record GetProductByIdResult(ProductDto Product);
 
 public class GetProductByIdHandler(CatalogDbContext dbContext) : IQueryHandler<GetProductByIdQuery, GetProductByIdResult>
 {
