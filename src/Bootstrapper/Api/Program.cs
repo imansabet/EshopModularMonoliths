@@ -1,6 +1,7 @@
 ﻿
 
 
+using Keycloak.AuthServices.Authentication;
 using Shared.Messaging.Extensions;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -33,6 +34,11 @@ builder.Services.AddStackExchangeRedisCache(options =>
 
 builder.Services
     .AddMassTransitWithAssemblies(builder.Configuration, catalogAssembly, basketAssembly);
+
+
+builder.Services.AddKeycloakWebApiAuthentication(builder.Configuration);
+builder.Services.AddAuthorization();
+
 
 
 builder.Services
