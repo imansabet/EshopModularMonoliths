@@ -6,26 +6,21 @@ using Shared.Messaging.Extensions;
 
 var builder = WebApplication.CreateBuilder(args);
 
-//builder.Services.AddCarter(configurator: config =>
-//{
-//    var catalogModules = typeof(CatalogModule).Assembly.GetTypes()
-//    .Where(t => t.IsAssignableTo(typeof(ICarterModule))).ToArray();
+builder.Host.UseSerilog((context, config) =>
+    config.ReadFrom.Configuration(context.Configuration));
 
-//    config.WithModules(catalogModules);
-//});
+// Add services to the container.
 
-builder.Host.UseSerilog((context,config) => 
-    config.ReadFrom.Configuration(context.Configuration) 
-); 
-
-//common services: carter, mediatr, fluentvalidation
+//common services: carter, mediatr, fluentvalidation, masstransit
 var catalogAssembly = typeof(CatalogModule).Assembly;
 var basketAssembly = typeof(BasketModule).Assembly;
-builder.Services
-    .AddCarterWithAssemblies(catalogAssembly, basketAssembly);
+var orderingAssembly = typeof(OrderingModule).Assembly;
 
 builder.Services
-    .AddMediatRWithAssemblies(catalogAssembly, basketAssembly);
+    .AddCarterWithAssemblies(catalogAssembly, basketAssembly, orderingAssembly);
+
+builder.Services
+    .AddMediatRWithAssemblies(catalogAssembly, basketAssembly, orderingAssembly);
 
 builder.Services.AddStackExchangeRedisCache(options =>
 {
@@ -33,38 +28,33 @@ builder.Services.AddStackExchangeRedisCache(options =>
 });
 
 builder.Services
-    .AddMassTransitWithAssemblies(builder.Configuration, catalogAssembly, basketAssembly);
-
+    .AddMassTransitWithAssemblies(builder.Configuration, catalogAssembly, basketAssembly, orderingAssembly);
 
 builder.Services.AddKeycloakWebApiAuthentication(builder.Configuration);
 builder.Services.AddAuthorization();
 
-
-
+//module services: catalog, basket, ordering
 builder.Services
     .AddCatalogModule(builder.Configuration)
-    .AddOrderingModule(builder.Configuration)
-    .AddBasketModule(builder.Configuration);
+    .AddBasketModule(builder.Configuration)
+    .AddOrderingModule(builder.Configuration);
 
 builder.Services
     .AddExceptionHandler<CustomExceptionHandler>();
 
-
-
 var app = builder.Build();
 
+// Configure the HTTP request pipeline.
 
 app.MapCarter();
 app.UseSerilogRequestLogging();
 app.UseExceptionHandler(options => { });
-
+app.UseAuthentication();
+app.UseAuthorization();
 
 app
     .UseCatalogModule()
     .UseBasketModule()
     .UseOrderingModule();
 
-
-
 app.Run();
- 
